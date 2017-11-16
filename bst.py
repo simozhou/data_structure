@@ -88,3 +88,54 @@ class BinarySearchTree(object):
         else:
             return self._get(key, current_node.rightChild)
 
+    def remove(self, current_node):
+        if current_node.is_leaf():
+            if current_node == current_node.parent.left_child:
+                current_node.parent.left_child = None
+            else:
+                current_node.parent.right_child = None
+        else:  # this node has one child
+            if current_node.has_left_child():
+                if current_node.is_left_child():
+                    current_node.left_child.parent = current_node.parent
+                    current_node.parent.left_child = current_node.left_child
+                elif current_node.is_right_child():
+                    current_node.left_child.parent = current_node.parent
+                    current_node.parent.right_child = current_node.left_child
+                else:
+                    current_node.replace_node(current_node.left_child.key,
+                                                current_node.left_child.payload,
+                                                current_node.left_child.left_child,
+                                                current_node.left_child.right_child)
+            else:
+                if current_node.is_left_child():
+                    current_node.rightChild.parent = current_node.parent
+                    current_node.parent.left_child = current_node.right_child
+                elif current_node.is_right_child():
+                    current_node.right_child.parent = current_node.parent
+                    current_node.parent.right_child = current_node.right_child
+                else:
+                    current_node.replace_node(current_node.right_child.key,
+                                                current_node.rightChild.payload,
+                                                current_node.right_child.left_child,
+                                                current_node.right_child.right_child)
+
+    def find_successor(self):
+        succ = None
+        if self.has_right_child():
+            succ = self.rightChild.find_min()
+        else:
+            if self.parent:
+                if self.is_left_child():
+                    succ = self.parent
+                else:
+                    self.parent.rightChild = None
+                    succ = self.parent.find_successor()
+                    self.parent.rightChild = self
+        return succ
+
+    def find_min(self):
+        current = self
+        while current.has_left_child():
+            current = current.left_child
+        return current
