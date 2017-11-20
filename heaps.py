@@ -1,5 +1,5 @@
 class MinHeap(object):
-    """ We will use AREIS to implement our heap.
+    """ We will use arrays to implement our heap.
     We know that each consecutive node is 2-fold away from the node you're starting so we can work by indexes"""
 
     def __init__(self):
@@ -43,4 +43,3 @@ class MinHeap(object):
         self.heapList.pop()
         self.percDown(1)
         return retval
-
